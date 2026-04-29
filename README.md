@@ -28,7 +28,7 @@ A REST API that validates card numbers using the Luhn algorithm. Built with Node
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME.git
+git clone https://github.com/michael-lfc/card-validator-api.git
 cd card-validator-api
 ```
 
