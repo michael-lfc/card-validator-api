@@ -327,7 +327,7 @@ The test suite includes:
 The API is deployed on Render and publicly accessible at:
 
 ```
-https://YOUR_RENDER_APP_NAME.onrender.com
+https://card-validator-api-no6a.onrender.com/api
 ```
 
 To test the deployed endpoint on Postman, replace the base URL:
