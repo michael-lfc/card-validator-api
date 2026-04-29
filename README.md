@@ -80,6 +80,7 @@ card-validator-api/
 ├── .gitignore
 ├── package.json
 ├── tsconfig.json
+├── tsconfig.test.json
 └── README.md
 ```
 
@@ -96,7 +97,7 @@ http://localhost:5000
 
 **Deployed:**
 ```
-https://YOUR_RENDER_APP_NAME.onrender.com
+https://card-validator-api-no6a.onrender.com/api/card/validate
 ```
 
 ---
