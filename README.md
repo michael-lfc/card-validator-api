@@ -343,7 +343,7 @@ Everything else — headers, request body, and expected responses — remains th
 ## Repository
 
 ```
-https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+https://github.com/michael-lfc/card-validator-api
 ```
 
 ---
