@@ -22,7 +22,7 @@ export async function validateCard(
     const cardStr = String(cardNumber).trim();
 
     if (cardStr.length === 0) {
-      throw new AppError(400, "cardNumber cannot be empty");
+      throw new AppError(400, "cardNumber must not be empty");
     }
 
     const isValid = validateCardNumber(cardStr);
