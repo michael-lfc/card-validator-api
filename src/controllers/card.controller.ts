@@ -3,11 +3,11 @@ import { validateCardNumber } from "../services/card.service";
 import { AppError } from "../middleware/error.middleware";
 import { CardValidationResponse } from "../types";
 
-export function validateCard(
+export async function validateCard(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   try {
     const { cardNumber } = req.body;
 
@@ -22,14 +22,18 @@ export function validateCard(
     const cardStr = String(cardNumber).trim();
 
     if (cardStr.length === 0) {
-      throw new AppError(400, "cardNumber must not be empty");
+      throw new AppError(400, "cardNumber cannot be empty");
     }
 
-    const valid = validateCardNumber(cardStr);
+    const isValid = validateCardNumber(cardStr);
 
     const response: CardValidationResponse = {
-      valid,
-      message: valid ? "Card number is valid" : "Card number is invalid",
+      success: true,
+      cardNumber: cardStr,
+      valid: isValid,
+      message: isValid
+        ? "Card number is valid"
+        : "Card number is invalid",
     };
 
     res.status(200).json(response);
