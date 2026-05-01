@@ -3,6 +3,8 @@ export interface CardValidationRequest {
 }
 
 export interface CardValidationResponse {
+  success: boolean;
+  cardNumber?: string;
   valid: boolean;
   message: string;
 }
