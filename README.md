@@ -80,7 +80,6 @@ card-validator-api/
 ├── .gitignore
 ├── package.json
 ├── tsconfig.json
-├── tsconfig.test.json
 └── README.md
 ```
 
@@ -97,7 +96,7 @@ http://localhost:5000
 
 **Deployed:**
 ```
-https://card-validator-api-no6a.onrender.com/api/card/validate
+https://card-validator-api-no6a.onrender.com
 ```
 
 ---
@@ -136,6 +135,7 @@ Content-Type: application/json
 |---|---|
 | `200` | Request was valid — check the `valid` field for the result |
 | `400` | Bad or missing input |
+| `404` | Route not found |
 | `500` | Internal server error |
 
 ---
@@ -143,6 +143,8 @@ Content-Type: application/json
 **200 — Valid card number**
 ```json
 {
+  "success": true,
+  "cardNumber": "4532015112830366",
   "valid": true,
   "message": "Card number is valid"
 }
@@ -151,6 +153,8 @@ Content-Type: application/json
 **200 — Invalid card number**
 ```json
 {
+  "success": true,
+  "cardNumber": "1234567890123456",
   "valid": false,
   "message": "Card number is invalid"
 }
@@ -159,21 +163,35 @@ Content-Type: application/json
 **400 — Missing cardNumber field**
 ```json
 {
-  "error": "cardNumber is required"
+  "success": false,
+  "error": "cardNumber is required",
+  "statusCode": 400
 }
 ```
 
 **400 — Empty string**
 ```json
 {
-  "error": "cardNumber must not be empty"
+  "success": false,
+  "error": "cardNumber must not be empty",
+  "statusCode": 400
 }
 ```
 
 **400 — Wrong type**
 ```json
 {
-  "error": "cardNumber must be a string or number"
+  "success": false,
+  "error": "cardNumber must be a string or number",
+  "statusCode": 400
+}
+```
+
+**404 — Unknown route**
+```json
+{
+  "success": false,
+  "error": "Route /api/card/wrong not found"
 }
 ```
 
@@ -197,91 +215,145 @@ Open Postman and configure every request as follows:
 
 ### 1. Valid card number
 
+**Request:**
 ```json
 { "cardNumber": "4532015112830366" }
 ```
 
-Expected — `200 OK`:
+**Expected — `200 OK`:**
 ```json
-{ "valid": true, "message": "Card number is valid" }
+{
+  "success": true,
+  "cardNumber": "4532015112830366",
+  "valid": true,
+  "message": "Card number is valid"
+}
 ```
 
 ---
 
 ### 2. Invalid card number
 
+**Request:**
 ```json
 { "cardNumber": "1234567890123456" }
 ```
 
-Expected — `200 OK`:
+**Expected — `200 OK`:**
 ```json
-{ "valid": false, "message": "Card number is invalid" }
+{
+  "success": true,
+  "cardNumber": "1234567890123456",
+  "valid": false,
+  "message": "Card number is invalid"
+}
 ```
 
 ---
 
 ### 3. Card number with spaces (should still pass)
 
+**Request:**
 ```json
 { "cardNumber": "4532 0151 1283 0366" }
 ```
 
-Expected — `200 OK`:
+**Expected — `200 OK`:**
 ```json
-{ "valid": true, "message": "Card number is valid" }
+{
+  "success": true,
+  "cardNumber": "4532 0151 1283 0366",
+  "valid": true,
+  "message": "Card number is valid"
+}
 ```
 
 ---
 
 ### 4. Card number with dashes (should still pass)
 
+**Request:**
 ```json
 { "cardNumber": "4532-0151-1283-0366" }
 ```
 
-Expected — `200 OK`:
+**Expected — `200 OK`:**
 ```json
-{ "valid": true, "message": "Card number is valid" }
+{
+  "success": true,
+  "cardNumber": "4532-0151-1283-0366",
+  "valid": true,
+  "message": "Card number is valid"
+}
 ```
 
 ---
 
 ### 5. Missing cardNumber field
 
+**Request:**
 ```json
 {}
 ```
 
-Expected — `400 Bad Request`:
+**Expected — `400 Bad Request`:**
 ```json
-{ "error": "cardNumber is required" }
+{
+  "success": false,
+  "error": "cardNumber is required",
+  "statusCode": 400
+}
 ```
 
 ---
 
 ### 6. Empty string
 
+**Request:**
 ```json
 { "cardNumber": "" }
 ```
 
-Expected — `400 Bad Request`:
+**Expected — `400 Bad Request`:**
 ```json
-{ "error": "cardNumber must not be empty" }
+{
+  "success": false,
+  "error": "cardNumber must not be empty",
+  "statusCode": 400
+}
 ```
 
 ---
 
 ### 7. Wrong type
 
+**Request:**
 ```json
 { "cardNumber": ["4532015112830366"] }
 ```
 
-Expected — `400 Bad Request`:
+**Expected — `400 Bad Request`:**
 ```json
-{ "error": "cardNumber must be a string or number" }
+{
+  "success": false,
+  "error": "cardNumber must be a string or number",
+  "statusCode": 400
+}
+```
+
+---
+
+### 8. Unknown route
+
+- **Method:** `POST`
+- **URL:** `http://localhost:5000/api/card/wrong`
+
+**Expected — `404 Not Found`:**
+```json
+{
+  "success": false,
+  "error": "Route /api/card/wrong not found"
+}
 ```
 
 ---
